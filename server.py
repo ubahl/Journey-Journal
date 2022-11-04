@@ -8,6 +8,7 @@ Go to http://localhost:8111 in your browser.
 A debugger such as "pdb" may be helpful for debugging.
 Read about it online.
 """
+import journey
 import os
   # accessible as a variable in index.html:
 from sqlalchemy import *
@@ -101,11 +102,33 @@ def index():
   #
   # example of a database query
   #
-  cursor = g.conn.execute("SELECT name FROM test")
-  names = []
+
+  # Original
+  # cursor = g.conn.execute("SELECT name FROM test")
+  # names = []
+  # for result in cursor:
+  #   names.append(result['name'])  # can also be accessed using result[0]
+  # cursor.close()
+
+  # Get Journey
+  cursor = g.conn.execute("SELECT * FROM Journey")
+  journeys = []
+  # names = []
   for result in cursor:
-    names.append(result['name'])  # can also be accessed using result[0]
+  	new_journey = journey.Journey(
+  		result[0],
+  		result[1],
+  		result[2],
+  		result[3],
+  		result[4],
+  		result[5],
+  		result[6]
+  	)
+  	print(new_journey)
+  	journeys.append(new_journey)
+    # names.append(result['name'])  # can also be accessed using result[0]
   cursor.close()
+
 
   #
   # Flask uses Jinja templates, which is an extension to HTML where you can
@@ -133,7 +156,7 @@ def index():
   #     <div>{{n}}</div>
   #     {% endfor %}
   #
-  context = dict(data = names)
+  context = dict(data = journeys)
 
 
   #
