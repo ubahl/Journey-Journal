@@ -7,5 +7,40 @@ h1 {
 }
 
 .journey-box {
+	display: flex;
+	margin: 1em;
+	padding: 1em;
+	outline: solid;
+
+}
+
+.date-box {
+	background-color: #114d66;
+	border-radius: 5px;
+	color: white;
+	margin: 1em;
+	padding: 1em;
+}
+
+.details-box {
+	display: flex;
+	flex-direction: column;
+	margin: 1em;
+	outline: solid;
+}
+
+.stations {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.other-details {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.each-detail {
 	outline: solid;
 }

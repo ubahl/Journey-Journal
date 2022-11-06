@@ -102,16 +102,14 @@ def index():
   #
   # DATABASE QUERIES
   #
-  
+
   # Get Journey
-  cursor = g.conn.execute("SELECT * FROM Journey")
+  cursor = g.conn.execute("SELECT J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date FROM Journey J")
   journeys = []
   for result in cursor:
   	new_journey = journey.Journey(
-  		result['train_id'],
   		result['start_station_name'],
   		result['end_station_name'],
-  		result['ssn'],
   		result['identifier'],
   		result['rating'],
   		result['date']
