@@ -100,33 +100,23 @@ def index():
 
 
   #
-  # example of a database query
+  # DATABASE QUERIES
   #
-
-  # Original
-  # cursor = g.conn.execute("SELECT name FROM test")
-  # names = []
-  # for result in cursor:
-  #   names.append(result['name'])  # can also be accessed using result[0]
-  # cursor.close()
-
+  
   # Get Journey
   cursor = g.conn.execute("SELECT * FROM Journey")
   journeys = []
-  # names = []
   for result in cursor:
   	new_journey = journey.Journey(
-  		result[0],
-  		result[1],
-  		result[2],
-  		result[3],
-  		result[4],
-  		result[5],
-  		result[6]
+  		result['train_id'],
+  		result['start_station_name'],
+  		result['end_station_name'],
+  		result['ssn'],
+  		result['identifier'],
+  		result['rating'],
+  		result['date']
   	)
-  	print(new_journey)
   	journeys.append(new_journey)
-    # names.append(result['name'])  # can also be accessed using result[0]
   cursor.close()
 
 

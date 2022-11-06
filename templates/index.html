@@ -1,19 +1,16 @@
 <html>
-  <style>
-    body{ 
-      font-size: 15pt;
-      font-family: arial;
-    }
-  </style>
+<head>
+  <link rel="stylesheet" href="../static/style.css">
+</head>
 
 
 <body>
-  <h1>Some famous Computer Scientists</h1>
-  <div>{{data}}</div>
+  <h1>Journey Journal</h1>
+  <!-- <div>{{data}}</div> -->
 
   <div>
     {% for n in data %}
-    <div>{{n}}</div>
+    <div class="journey-box">{{n}}</div>
     {% endfor %}
   </div>
 
