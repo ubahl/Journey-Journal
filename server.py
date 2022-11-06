@@ -8,6 +8,7 @@ Go to http://localhost:8111 in your browser.
 A debugger such as "pdb" may be helpful for debugging.
 Read about it online.
 """
+import journey
 import os
   # accessible as a variable in index.html:
 from sqlalchemy import *
@@ -19,17 +20,9 @@ app = Flask(__name__, template_folder=tmpl_dir)
 
 
 #
-# The following is a dummy URI that does not connect to a valid database. You will need to modify it to connect to your Part 2 database in order to use the data.
+# Connects to our database.
 #
-# XXX: The URI should be in the format of:
-#
-#     postgresql://USER:PASSWORD@34.75.94.195/proj1part2
-#
-# For example, if you had username gravano and password foobar, then the following line would be:
-#
-#     DATABASEURI = "postgresql://gravano:foobar@34.75.94.195/proj1part2"
-#
-DATABASEURI = "postgresql://user:password@34.75.94.195/proj1part2"
+DATABASEURI = "postgresql://ank2177:8575@34.75.94.195/proj1part2"
 
 
 #
@@ -107,13 +100,23 @@ def index():
 
 
   #
-  # example of a database query
+  # DATABASE QUERIES
   #
-  cursor = g.conn.execute("SELECT name FROM test")
-  names = []
+
+  # Get Journey
+  cursor = g.conn.execute("SELECT J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date FROM Journey J")
+  journeys = []
   for result in cursor:
-    names.append(result['name'])  # can also be accessed using result[0]
+  	new_journey = journey.Journey(
+  		result['start_station_name'],
+  		result['end_station_name'],
+  		result['identifier'],
+  		result['rating'],
+  		result['date']
+  	)
+  	journeys.append(new_journey)
   cursor.close()
+
 
   #
   # Flask uses Jinja templates, which is an extension to HTML where you can
@@ -141,7 +144,7 @@ def index():
   #     <div>{{n}}</div>
   #     {% endfor %}
   #
-  context = dict(data = names)
+  context = dict(data = journeys)
 
 
   #

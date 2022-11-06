@@ -1,19 +1,38 @@
 <html>
-  <style>
-    body{ 
-      font-size: 15pt;
-      font-family: arial;
-    }
-  </style>
+<head>
+  <link rel="stylesheet" href="../static/style.css">
+</head>
 
 
 <body>
-  <h1>Some famous Computer Scientists</h1>
-  <div>{{data}}</div>
+  <h1>Journey Journal</h1>
+  <!-- <div>{{data}}</div> -->
 
   <div>
     {% for n in data %}
-    <div>{{n}}</div>
+    <div class="journey-box">
+      <div class="date-box">
+        {{n.date}}
+      </div>
+      <div class="details-box">
+        <div class="stations">
+          <div class="each-detail">
+            {{n.start_station_name}}
+          </div>
+          <div class="each-detail">
+            {{n.end_station_name}}
+          </div>
+        </div>
+        <div class="other-details">
+          <div class="each-detail">
+            {{n.rating}}
+          </div>
+          <div class="each-detail">
+            {{n.identifier}}
+          </div>
+        </div>
+      </div>
+    </div>
     {% endfor %}
   </div>
 
