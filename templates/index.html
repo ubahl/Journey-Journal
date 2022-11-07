@@ -8,6 +8,12 @@
   <h1>Journey Journal</h1>
   <!-- <div>{{data}}</div> -->
 
+  <div class="filters">
+    <form action="/sort" method="get">
+      <button class="filter-button">Sort By Date</button>
+    </form>
+  </div>
+
   <div class="journeys">
     {% for n in data %}
     <div class="journey-box">

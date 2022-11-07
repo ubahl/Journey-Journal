@@ -12,6 +12,19 @@ body {
 	justify-content: center;
 }
 
+.filter-button {
+	background: #114d66;
+	border: none;
+	border-radius: 1em;
+	color: white;
+	padding: 1em;
+}
+
+.filters {
+	display: flex;
+	justify-content: center;
+}
+
 .journeys {
 	justify-content: center;
 	flex-direction: column;
