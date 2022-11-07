@@ -13,7 +13,7 @@ import os
   # accessible as a variable in index.html:
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response
+from flask import Flask, request, render_template, g, redirect, Response, session
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
@@ -34,12 +34,13 @@ engine = create_engine(DATABASEURI)
 # Example of running queries in your database
 # Note that this will probably not work if you already have a table named 'test' in your database, containing meaningful data. This is only an example showing you how to run queries in your database using SQLAlchemy.
 #
-engine.execute("""CREATE TABLE IF NOT EXISTS test (
-  id serial,
-  name text
-);""")
-engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace');""")
+# engine.execute("""CREATE TABLE IF NOT EXISTS test (
+#   id serial,
+#   name text
+# );""")
+# engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace');""")
 
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.before_request
 def before_request():
@@ -96,17 +97,28 @@ def index():
   """
 
   # DEBUG: this is debugging code to see what request looks like
-  print(request.args)
+  print("request", request.args)
+
+  # if the request sorted
 
 
   #
   # DATABASE QUERIES
   #
 
-  # Get Journey
-  cursor = g.conn.execute("SELECT C.name, J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date \
+  query = "SELECT C.name, J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date \
     FROM Commuter C, Journey J \
-    WHERE C.ssn = J.ssn")
+    WHERE C.ssn = J.ssn"
+
+  # Get Journey
+  if ("filter" in session and session["filter"] == "sort"):
+    query = "SELECT C.name, J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date \
+    FROM Commuter C, Journey J \
+    WHERE C.ssn = J.ssn\
+    ORDER BY J.date"
+
+  print(query)
+  cursor = g.conn.execute(query)
   journeys = []
   for result in cursor:
   	new_journey = journey.Journey(
@@ -118,6 +130,9 @@ def index():
   		result['date']
   	)
   	journeys.append(new_journey)
+
+  session["filter"] = "default"
+
   cursor.close()
 
 
@@ -170,6 +185,11 @@ def another():
 
 
 # Example of adding new data to the database
+@app.route('/sort', methods=['GET'])
+def sort():
+  session["filter"] = "sort"
+  return redirect('/')
+
 @app.route('/add', methods=['POST'])
 def add():
   name = request.form['name']
