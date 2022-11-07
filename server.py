@@ -104,10 +104,13 @@ def index():
   #
 
   # Get Journey
-  cursor = g.conn.execute("SELECT J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date FROM Journey J")
+  cursor = g.conn.execute("SELECT C.name, J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date \
+    FROM Commuter C, Journey J \
+    WHERE C.ssn = J.ssn")
   journeys = []
   for result in cursor:
   	new_journey = journey.Journey(
+      result['name'],
   		result['start_station_name'],
   		result['end_station_name'],
   		result['identifier'],
