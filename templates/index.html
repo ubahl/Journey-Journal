@@ -8,27 +8,27 @@
   <h1>Journey Journal</h1>
   <!-- <div>{{data}}</div> -->
 
-  <div>
+  <div class="journeys">
     {% for n in data %}
     <div class="journey-box">
       <div class="date-box">
         {{n.date}}
       </div>
       <div class="details-box">
-        <div class="stations">
-          <div class="each-detail">
+        <div class="details-col">
+          <div class="detail">
             {{n.start_station_name}}
           </div>
-          <div class="each-detail">
-            {{n.end_station_name}}
+          <div class="detail">
+            {{n.rating}} Stars
           </div>
         </div>
-        <div class="other-details">
-          <div class="each-detail">
-            {{n.rating}}
+        <div class="details-col">
+          <div class="detail">
+            {{n.end_station_name}}
           </div>
-          <div class="each-detail">
-            {{n.identifier}}
+          <div class="detail">
+            {{n.identifier}} Line
           </div>
         </div>
       </div>
