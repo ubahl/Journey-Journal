@@ -117,6 +117,11 @@ def index():
     WHERE C.ssn = J.ssn\
     ORDER BY J.date"
 
+  if ("rating" in session and session["rating"] != "default"):
+    query = "SELECT C.name, J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date \
+    FROM Commuter C, Journey J \
+    WHERE C.ssn = J.ssn AND J.rating >= {}".format(session["rating"])
+
   print(query)
   cursor = g.conn.execute(query)
   journeys = []
@@ -132,6 +137,7 @@ def index():
   	journeys.append(new_journey)
 
   session["filter"] = "default"
+  session["rating"] = "default"
 
   cursor.close()
 
@@ -188,6 +194,11 @@ def another():
 @app.route('/sort', methods=['GET'])
 def sort():
   session["filter"] = "sort"
+  return redirect('/')
+
+@app.route('/rating', methods=['GET'])
+def route():
+  session["rating"] = request.args['num']
   return redirect('/')
 
 @app.route('/add', methods=['POST'])
