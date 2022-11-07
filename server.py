@@ -141,7 +141,6 @@ def index():
 
   cursor.close()
 
-
   #
   # Flask uses Jinja templates, which is an extension to HTML where you can
   # pass data to a template and dynamically generate HTML based on the data
@@ -190,6 +189,20 @@ def another():
   return render_template("another.html")
 
 
+@app.route('/post-journey')
+def postJourney():
+
+  # Gets all subway line identifiers
+  cursor = g.conn.execute("SELECT DISTINCT L.identifier FROM Line L")
+  identifiers = []
+  for result in cursor:
+    identifiers.append(result)
+  cursor.close()
+
+  context = dict(data = identifiers)
+
+  return render_template("postJourney.html", **context)
+
 # Example of adding new data to the database
 @app.route('/sort', methods=['GET'])
 def sort():
@@ -207,6 +220,94 @@ def add():
   g.conn.execute('INSERT INTO test(name) VALUES (%s)', name)
   return redirect('/')
 
+# POST endpoint for inserting new Journey tuple
+@app.route('/insert-new-journey', methods=['POST'])
+def insertNewJourney():
+  ssn = request.form['ssn']
+  identifier = request.form['identifier']
+  start_station = request.form['start_station']
+  end_station = request.form['end_station']
+  train_id = request.form['train_id']
+  rating = request.form['rating']
+  date = request.form['date']
+  name = request.form['name']
+  age = request.form['age']
+  is_cs_student = request.form['is_cs_student']
+
+  cursor = g.conn.execute('SELECT * FROM Commuter C WHERE C.ssn = %s', ssn)
+
+  commuter_exists = False
+  for result in cursor:
+    commuter_exists = True
+
+  if not commuter_exists:
+    g.conn.execute('INSERT INTO Commuter VALUES (%s, %s, %s, %s);', ssn, name, age, is_cs_student)
+
+  #ssn, identifier, train_id, start_station, end_station, rating, date = request.form['ssn', 'identifier', 'train_id', 'start_station', 'end_station', 'rating', 'date']
+  g.conn.execute('INSERT INTO Journey VALUES (%s, %s, %s, %s, %s, %s, %s);', train_id, start_station, end_station, ssn, identifier, rating, date)
+  return redirect('/')
+
+
+@app.route('/get-start-stations')
+def getStartStations():
+  identifier = request.args["identifier"]
+  
+  cursor = g.conn.execute('SELECT DISTINCT SA.name FROM Services S, Stops_At SA WHERE S.train_id = SA.train_id AND S.identifier = %s', identifier)
+  start_stations = []
+  for result in cursor:
+    start_stations.append(result["name"])
+  cursor.close()
+  
+  return start_stations
+
+@app.route('/view-commuters')
+def viewCommuters():
+  
+  cursor = g.conn.execute('SELECT DISTINCT * FROM Commuter C')
+  commuters = []
+  for result in cursor:
+    commuters.append((result["name"].strip(), result["age"], result["ssn"], result["is_cs_student"]))
+  cursor.close()
+  
+  return commuters
+
+@app.route('/view-journeys')
+def viewJourneys():
+  
+  cursor = g.conn.execute('SELECT DISTINCT * FROM Journey J')
+  commuters = []
+  for result in cursor:
+    commuters.append((result["ssn"]))
+  cursor.close()
+  
+  return commuters
+
+@app.route('/get-end-stations')
+def getEndStations():
+  identifier = request.args["identifier"]
+  start_station = request.args["start_station"]
+  
+  cursor = g.conn.execute('SELECT DISTINCT SA.name FROM Services S, Stops_At SA WHERE S.train_id = SA.train_id AND S.identifier = %s AND SA.name != %s', identifier, start_station)
+  end_stations = []
+  for result in cursor:
+    end_stations.append(result["name"])
+  cursor.close()
+  
+  return end_stations
+
+@app.route('/get-trains')
+def getTrains():
+  identifier = request.args["identifier"]
+  start_station = request.args["start_station"]
+  end_station = request.args["end_station"]
+  
+  cursor = g.conn.execute('SELECT DISTINCT SA.train_id FROM Services S, Stops_At SA, Stops_At SA2 WHERE S.train_id = SA.train_id AND S.train_id = SA2.train_id AND S.identifier = %s AND SA.name != %s AND SA2.name != %s', identifier, start_station, end_station)
+  train_ids = []
+  for result in cursor:
+    train_ids.append(result["train_id"])
+  cursor.close()
+  
+  return train_ids
 
 @app.route('/login')
 def login():
