@@ -6,12 +6,57 @@ h1 {
 	text-align: center;
 }
 
-.journey-box {
+body {
 	display: flex;
-	margin: 1em;
-	padding: 1em;
-	outline: solid;
+	flex-direction: column;
+	justify-content: center;
+}
 
+.filter-button {
+	background: #114d66;
+	border: none;
+	border-radius: 1em;
+	color: white;
+	padding: 1em;
+}
+
+.filter-form {
+	background: #114d66;
+	border-radius: 1em;
+	color: white;
+	display: flex;
+	justify-content: center;
+	margin-left: 30%;
+	margin-right: 30%;
+}
+
+.filters {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.journeys {
+	justify-content: center;
+	flex-direction: column;
+	display: flex;
+}
+
+.journey-box {
+	background-color: #2392a8;
+	border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	margin: 1em;
+	margin-right: 25%;
+	margin-left: 25%;
+	padding: 1em;
+}
+
+.details-box {
+	display: flex;
+	flex-direction: row;
+	margin: 1em;
 }
 
 .date-box {
@@ -22,25 +67,14 @@ h1 {
 	padding: 1em;
 }
 
-.details-box {
+.details-col {
 	display: flex;
 	flex-direction: column;
-	margin: 1em;
-	outline: solid;
 }
 
-.stations {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-}
-
-.other-details {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-}
-
-.each-detail {
-	outline: solid;
+.detail{
+	background-color: white;
+	border-radius: 5px;
+	margin: 0.5em;
+	padding: 1em;
 }

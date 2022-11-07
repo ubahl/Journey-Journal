@@ -8,27 +8,47 @@
   <h1>Journey Journal</h1>
   <!-- <div>{{data}}</div> -->
 
-  <div>
+  <div class="filters">
+    <form method="GET" action="/sort" class="filter-form">
+      <button class="filter-button" formaction="/sort">Sort By Date</button>
+    </form>
+
+    <form method="GET" class="filter-form">
+      <p> 
+        Journeys with a rating of at least 
+        <select id="filter-rating">
+          <option value="one">1</option>
+          <option value="two">2</option>
+          <option value="three">3</option>
+          <option value="four">4</option>
+          <option value="five">5</option>
+        </select>
+      </p>
+    </form>
+  </div>
+
+  <div class="journeys">
     {% for n in data %}
     <div class="journey-box">
       <div class="date-box">
+        {{n.name}}'s trip on
         {{n.date}}
       </div>
       <div class="details-box">
-        <div class="stations">
-          <div class="each-detail">
+        <div class="details-col">
+          <div class="detail">
             {{n.start_station_name}}
           </div>
-          <div class="each-detail">
-            {{n.end_station_name}}
+          <div class="detail">
+            {{n.rating}} Stars
           </div>
         </div>
-        <div class="other-details">
-          <div class="each-detail">
-            {{n.rating}}
+        <div class="details-col">
+          <div class="detail">
+            {{n.end_station_name}}
           </div>
-          <div class="each-detail">
-            {{n.identifier}}
+          <div class="detail">
+            {{n.identifier}} Line
           </div>
         </div>
       </div>
@@ -44,5 +64,11 @@
 
 </body>
 
-
+<script type="text/javascript">
+  let rating_select = document.getElementById("filter-rating")
+  rating_select.onchange = function () {
+    requested_rating = this.selectedIndex + 1
+    window.location.replace(`/rating?num=${requested_rating}`)
+  }
+</script>
 </html>
