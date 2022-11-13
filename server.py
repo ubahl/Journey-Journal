@@ -223,6 +223,7 @@ def add():
 # POST endpoint for inserting new Journey tuple
 @app.route('/insert-new-journey', methods=['POST'])
 def insertNewJourney():
+  print("yeet")
   ssn = request.form['ssn']
   identifier = request.form['identifier']
   start_station = request.form['start_station']
@@ -232,7 +233,15 @@ def insertNewJourney():
   date = request.form['date']
   name = request.form['name']
   age = request.form['age']
-  is_cs_student = request.form['is_cs_student']
+  try:
+    print("ok")
+    is_cs_student = request.form['is_cs_student']
+    print("cool")
+  except:
+    print("error")
+    is_cs_student = False
+
+  print(is_cs_student)
 
   cursor = g.conn.execute('SELECT * FROM Commuter C WHERE C.ssn = %s', ssn)
 

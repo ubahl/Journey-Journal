@@ -4,147 +4,60 @@
   <script>
 
     function get_start_stations() {
+      clear_form(0)
       identifier = document.getElementById('identifier').value
-      //clear_form(2)
       fetch(`/get-start-stations?identifier=${identifier}`)
         .then((response) => response.json())
         .then((data) => {
           
-          add_select("At which station did you start your trip? ", "start_station", "get_end_stations", data)
+          add_select("start_station", data)
 
         });
     }
 
     function get_end_stations() {
+      clear_form(1)
       identifier = document.getElementById('identifier').value
       start_station = document.getElementById('start_station').value
-      //clear_form(4)
       fetch(`/get-end-stations?identifier=${identifier}&start_station=${start_station}`)
         .then((response) => response.json())
         .then((data) => {
           
-          add_select("At which station did you end your trip? ", "end_station", "get_trains", data)
+          add_select("end_station", data)
 
         });
     }
 
     function get_trains() {
+      clear_form(2)
       identifier = document.getElementById('identifier').value
       start_station = document.getElementById('start_station').value
       end_station = document.getElementById('end_station').value
-      //clear_form(4)
       fetch(`/get-trains?identifier=${identifier}&start_station=${start_station}&end_station=${end_station}`)
         .then((response) => response.json())
         .then((data) => {
           
-          add_select("What was the train id of the train you took? (this should be common knowledge...) ", "train_id", "load_remaining_inputs", data)
+          add_select("train_id", data)
           
         });
     }
 
     function load_remaining_inputs() {
-      form = document.getElementById("insert-new-journey")
 
-      form.append(document.createElement("br"))
+      remaining_inputs = ["ssn", "age" , "date", "name", "is_cs_student", "rating"]
 
-      label = document.createElement("label")
-      label.innerHTML = "How would you rate your trip? "
-      form.append(label)
-
-      select = document.createElement("select")
-      select.name = "rating"
-      select.id = "rating"
-      for (var i = 1; i <= 5; i++) {
-        option = document.createElement("option")
-        option.value = i
-        option.innerHTML = i
-        select.append(option)
+      for (var i = 0; i < remaining_inputs.length; i++) {
+        document.getElementById(remaining_inputs[i]).hidden = false
+        document.getElementById(remaining_inputs[i]+"_label").hidden = false
       }
 
-      form.append(select)
-
-      form.append(document.createElement("br"))
-
-      label2 = document.createElement("label")
-      label2.innerHTML = "Give us your SSN >:)  :) :) :) :) "
-      form.append(label2)
-
-      input2 = document.createElement("input")
-      input2.type = "number"
-      input2.id = "ssn"
-      input2.name = "ssn"
-      form.append(input2)
-
-      form.append(document.createElement("br"))
-
-      label3 = document.createElement("label")
-      label3.innerHTML = "What was the date of this trip? "
-      form.append(label3)
-
-      input3 = document.createElement("input")
-      input3.type = "date"
-      input3.id = "date"
-      input3.name = "date"
-      form.append(input3)
-
-      form.append(document.createElement("br"))
-
-      label4 = document.createElement("label")
-      label4.innerHTML = "What's your name? "
-      form.append(label4)
-
-      input4 = document.createElement("input")
-      input4.type = "text"
-      input4.id = "name"
-      input4.name = "name"
-      form.append(input4)
-
-      label5 = document.createElement("label")
-      label5.innerHTML = "What's your age? "
-      form.append(label5)
-
-      input5 = document.createElement("input")
-      input5.type = "number"
-      input5.id = "age"
-      input5.name = "age"
-      form.append(input5)
-
-      label6 = document.createElement("label")
-      label6.innerHTML = "Are you a CS student? "
-      form.append(label6)
-
-      input6 = document.createElement("input")
-      input6.type = "radio"
-      input6.id = "is_cs_student"
-      input6.name = "is_cs_student"
-      input6.value = "off"
-      form.append(input6)
-
-      form.append(document.createElement("br"))
-
-      submit = document.createElement("input")
-      submit.type = "submit"
-      submit.value = "Post Your Journey!"
-      form.append(submit)
+      document.getElementById("submit_button").hidden = false
 
     }
 
-    function add_select(prompt, select_id, select_function, options) {
+    function add_select(select_id, options) {
 
-      form = document.getElementById("insert-new-journey")
-      form.append(document.createElement("br"))
-
-      label = document.createElement("label")
-      label.innerHTML = prompt
-      form.append(label)
-
-      select = document.createElement("select")
-      select.name = select_id
-      select.id = select_id
-      select.setAttribute("onchange", `if (this.selectedIndex != 0) {${select_function}()}`)
-
-      select.append(document.createElement("option"))
-
+      select = document.getElementById(select_id)
       for (var i = 0; i < options.length; i++) {
         option = document.createElement("option")
         option.value = options[i]
@@ -152,20 +65,30 @@
         select.append(option)
       }
 
-      form.append(select)
+      select.hidden = false
+      document.getElementById(select_id + "_label").hidden = false
+
     }
 
     function clear_form(index) {
-      for (var i = index; i < form.length*2; i++) {
 
-      form = document.getElementById("insert-new-journey")
+      input_ids = ["start_station", "end_station", "train_id", "rating", "ssn", "date", "name", "age", "is_cs_student"]
 
-        for (var i = index; i < form.length*2; i++) {
-          form = document.getElementById("insert-new-journey")
-          form.removeChild(form.children[index])
+      for (var i = index; i < input_ids.length; i++) {
+
+        select = document.getElementById(input_ids[i])
+
+        document.getElementById(input_ids[i]).hidden = true
+        //console.log("Setting " + input_ids[i] + ".hidden = true")
+        document.getElementById(input_ids[i]+"_label").hidden = true
+
+        if (input_ids[i] != "rating" && input_ids[i] != "date" && input_ids[i] != "is_cs_student" ) {
+          select.innerHTML = '<option></option>'
         }
         
       }
+
+      document.getElementById("submit_button").hidden = true
     }
 
   </script>
@@ -173,7 +96,7 @@
 
 <body>
   <h1>Journey Journal</h1>
-
+  <h2>Post Your Journey!</h2>
 
     <form method="POST" action="/insert-new-journey" id="insert-new-journey">
       <label for="identifier">Which subway line did you take? </label>
@@ -183,14 +106,47 @@
         <option value={{n.identifier}}>{{n.identifier}}</option> 
         {% endfor %}
       </select>
-      <!--<input type="text" name="identifier"> 
-      <p>At which station did you start your trip?: <input type="text" name="start_station"> 
-      <p>At which station did you end your trip?: <input type="text" name="end_station"> 
-      <p>Which train did you take?: <input type="text" name="train_id"> 
-      <p>How would you rate your trip?: <input type="text" name="rating"> 
-      <p>Give us your SSN >:)  :) :) :) :) <input type="text" name="ssn"> 
-      <input type="submit" value="Add"></p>-->
-    </form>
+      <br>
+      <label id="start_station_label" hidden>At which station did you start your trip? </label>
+      <select hidden name="start_station" id="start_station" onchange="if (this.selectedIndex != 0) {get_end_stations()}">
+        <option></option>
+      </select>
+      <br>
+      <label id="end_station_label" hidden>At which station did you end your trip? </label>
+      <select hidden name="end_station" id="end_station" onchange="if (this.selectedIndex != 0) {get_trains()}">
+        <option></option>
+      </select>
+      <br>
+      <label id="train_id_label" hidden>What was the train id of the train you took? (this should be common knowledge...) </label>
+      <select hidden name="train_id" id="train_id" onchange="if (this.selectedIndex != 0) {load_remaining_inputs()}">
+        <option></option>
+      </select>
+      <br>
+      <label id="rating_label" hidden>How would you rate your trip? </label>
+      <select hidden name="rating" id="rating">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <br>
+      <label id="ssn_label" hidden>Give us your SSN &gt;:)  :) :) :) :) </label>
+      <input hidden type="number" id="ssn" name="ssn">
+      <br>
+      <label id="date_label" hidden>What was the date of this trip? </label>
+      <input hidden type="date" id="date" name="date">
+      <br>
+      <label id="name_label" hidden>What's your name? </label>
+      <input hidden type="text" id="name" name="name">
+      <br>
+      <label id="age_label" hidden>What's your age? </label>
+      <input hidden type="number" id="age" name="age">
+      <br>
+      <label id="is_cs_student_label"  hidden>Are you a CS student? </label>
+      <input hidden type="radio" id="is_cs_student" name="is_cs_student" value="off">
+      <br>
+      <input id="submit_button" hidden type="submit" value="Post Your Journey!"></form>
 
 </body>
 
