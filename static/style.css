@@ -90,3 +90,9 @@ body {
 	margin: 0.5em;
 	padding: 1em;
 }
+
+#rat-mode{
+	position: absolute;
+	right: 0px;
+	top: 0px;
+}

@@ -7,6 +7,10 @@
 <body>
   <h1>Journey Journal</h1>
 
+  <div id="rat-mode">
+    <img src="../static/rat.png" alt="rat mode" style="height: 50px;">
+  </div>
+
   <div class="filters">
     <button class="add-journey-button" onclick="location.href = '/post-journey'"> 
       Add Your Journey!
@@ -65,6 +69,40 @@
   rating_select.onchange = function () {
     requested_rating = this.selectedIndex + 1
     window.location.replace(`/rating?num=${requested_rating}`)
+  }
+
+  let rat_button = document.getElementById("rat-mode")
+  rat_button.onclick = () => {
+    console.log("rat time")
+
+    let rating_boxes = document.getElementsByClassName("journey-box")
+    for (let i = 0; i < rating_boxes.length; i++) {
+      rating_boxes[i].style.backgroundColor = "black"
+    }
+
+    let date_boxes = document.getElementsByClassName("date-box")
+    for (let i = 0; i < date_boxes.length; i++) {
+      date_boxes[i].style.backgroundColor = "darkred"
+    }
+
+    let detail_boxes = document.getElementsByClassName("detail")
+    for (let i = 0; i < detail_boxes.length; i++) {
+      detail_boxes[i].style.backgroundColor = "gold"
+    }
+
+    let filter_boxes = document.getElementsByClassName("filter-form")
+    for (let i = 0; i < filter_boxes.length; i++) {
+      filter_boxes[i].style.backgroundColor = "#303030"
+    }
+
+    let filter_button = document.getElementsByClassName("filter-button")
+    for (let i = 0; i < filter_button.length; i++) {
+      filter_button[i].style.backgroundColor = "#303030"
+    }
+
+    let html_elt = document.documentElement
+    html_elt.style.backgroundColor = "red"
+
   }
 </script>
 </html>
