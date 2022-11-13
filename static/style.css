@@ -12,6 +12,18 @@ body {
 	justify-content: center;
 }
 
+.add-journey-button {
+	background: #d3d3d3;
+	border: none;
+	border-radius: 1em;
+	display: flex;
+	margin-bottom: 1em;
+	margin-left: 30%;
+	margin-right: 30%;
+	justify-content: center;
+	padding: 1em;
+}
+
 .filter-button {
 	background: #114d66;
 	border: none;

@@ -6,9 +6,12 @@
 
 <body>
   <h1>Journey Journal</h1>
-  <!-- <div>{{data}}</div> -->
 
   <div class="filters">
+    <button class="add-journey-button" onclick="location.href = '/post-journey'"> 
+      Add Your Journey!
+    </button>
+
     <form method="GET" action="/sort" class="filter-form">
       <button class="filter-button" formaction="/sort">Sort By Date</button>
     </form>
