@@ -1,19 +1,17 @@
 
 """
 Columbia's COMS W4111.001 Introduction to Databases
-Example Webserver
+JourneyJournal by Uma Bahl and Abram Kremer
 To run locally:
     python3 server.py
 Go to http://localhost:8111 in your browser.
-A debugger such as "pdb" may be helpful for debugging.
-Read about it online.
 """
 import journey
 import os
-  # accessible as a variable in index.html:
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, session
+import regex as re
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
@@ -31,25 +29,14 @@ DATABASEURI = "postgresql://ank2177:8575@34.75.94.195/proj1part2"
 engine = create_engine(DATABASEURI)
 
 #
-# Example of running queries in your database
-# Note that this will probably not work if you already have a table named 'test' in your database, containing meaningful data. This is only an example showing you how to run queries in your database using SQLAlchemy.
+# Sets up application to use cookies.
 #
-# engine.execute("""CREATE TABLE IF NOT EXISTS test (
-#   id serial,
-#   name text
-# );""")
-# engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace');""")
-
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 @app.before_request
 def before_request():
   """
   This function is run at the beginning of every web request
-  (every time you enter an address in the web browser).
-  We use it to setup a database connection that can be used throughout the request.
-
-  The variable g is globally accessible.
   """
   try:
     g.conn = engine.connect()
@@ -96,33 +83,29 @@ def index():
 
   """
 
-  # DEBUG: this is debugging code to see what request looks like
-  print("request", request.args)
-
-  # if the request sorted
-
-
   #
   # DATABASE QUERIES
   #
 
+  # Gets all the Journeys.
   query = "SELECT C.name, J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date \
     FROM Commuter C, Journey J \
     WHERE C.ssn = J.ssn"
 
-  # Get Journey
+  # Get Journeys, ordered.
   if ("filter" in session and session["filter"] == "sort"):
     query = "SELECT C.name, J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date \
     FROM Commuter C, Journey J \
     WHERE C.ssn = J.ssn\
     ORDER BY J.date"
 
+  # Gets Journeys for a specific rating.
   if ("rating" in session and session["rating"] != "default"):
     query = "SELECT C.name, J.start_station_name, J.end_station_name, J.identifier, J.rating, J.date \
     FROM Commuter C, Journey J \
     WHERE C.ssn = J.ssn AND J.rating >= {}".format(session["rating"])
 
-  print(query)
+  # Executes the Query.
   cursor = g.conn.execute(query)
   journeys = []
   for result in cursor:
@@ -136,6 +119,7 @@ def index():
   	)
   	journeys.append(new_journey)
 
+  # Refreshes any filters.
   session["filter"] = "default"
   session["rating"] = "default"
 
@@ -177,22 +161,11 @@ def index():
   return render_template("index.html", **context)
 
 #
-# This is an example of a different path.  You can see it at:
+# PATHS
 #
-#     localhost:8111/another
-#
-# Notice that the function name is another() rather than index()
-# The functions for each app.route need to have different names
-#
-@app.route('/another')
-def another():
-  return render_template("another.html")
-
-
 @app.route('/post-journey')
 def postJourney():
-
-  # Gets all subway line identifiers
+  # Gets all subway line identifiers.
   cursor = g.conn.execute("SELECT DISTINCT L.identifier FROM Line L")
   identifiers = []
   for result in cursor:
@@ -203,7 +176,7 @@ def postJourney():
 
   return render_template("postJourney.html", **context)
 
-# Example of adding new data to the database
+# Filters for getting Journey information.
 @app.route('/sort', methods=['GET'])
 def sort():
   session["filter"] = "sort"
@@ -214,16 +187,9 @@ def route():
   session["rating"] = request.args['num']
   return redirect('/')
 
-@app.route('/add', methods=['POST'])
-def add():
-  name = request.form['name']
-  g.conn.execute('INSERT INTO test(name) VALUES (%s)', name)
-  return redirect('/')
-
 # POST endpoint for inserting new Journey tuple
 @app.route('/insert-new-journey', methods=['POST'])
 def insertNewJourney():
-  print("yeet")
   ssn = request.form['ssn']
   identifier = request.form['identifier']
   start_station = request.form['start_station']
@@ -234,14 +200,52 @@ def insertNewJourney():
   name = request.form['name']
   age = request.form['age']
   try:
-    print("ok")
     is_cs_student = request.form['is_cs_student']
-    print("cool")
   except:
-    print("error")
     is_cs_student = False
 
-  print(is_cs_student)
+  # INPUT VERIFICATION (to prevent SQL injections / errors)
+  # If it fails any, the query is not executed and the user is brought back to the home page.
+
+  # Make sure ssn is a 9 digit number.
+  if (len(ssn) != 9 or not re.search('^[0-9]*$', ssn)):
+  	print("Invalid ssn")
+  	return redirect('/')
+
+  # Make sure identifier is valid.
+  if (len(identifier) > 1):
+  	print("Invalid identifier")
+  	return redirect('/')
+
+  # Make sure start station and end station are alphanumeric (can include the - symbol).
+  if (not re.search('^[-a-zA-Z0-9 ]*$', start_station) or not re.search('^[-a-zA-Z0-9 ]*$', end_station)):
+  	print("Invalid station name")
+  	return redirect('/')
+
+  # Make sure train_id is valid.
+  if (len(train_id) != 10 or not re.search('^[0-9]*$', train_id)):
+  	print("Invalid train id")
+  	return redirect('/')
+
+  # Make sure rating is between 1 - 5.
+  if (not re.search('^[1-5]$', rating)):
+  	print("Invalid rating")
+  	return redirect('/')
+
+  # Make sure the date is valid mm/dd/yyyy.
+  if (not re.search('^[0-9]{4}-[0-9]{2}-[0-9]{2}$', date)):
+  	print("Invalid date")
+  	return redirect('/')
+
+  # Make sure name is alphanumeric (can include the - symbol).
+  if (not re.search('^[-a-zA-Z0-9 ]*$', name)):
+  	print("Invalid name")
+  	return redirect('/')
+
+  # Make sure age is valid.
+  if (not re.search('^[0-9]*$', age)):
+  	print("Invalid age")
+  	return redirect('/')
 
   cursor = g.conn.execute('SELECT * FROM Commuter C WHERE C.ssn = %s', ssn)
 
