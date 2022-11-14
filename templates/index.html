@@ -7,6 +7,10 @@
 <body>
   <h1>Journey Journal</h1>
 
+  <div id="rat-mode">
+    <img src="../static/rat.png" alt="rat mode" style="height: 50px;">
+  </div>
+
   <div class="filters">
     <button class="add-journey-button" onclick="location.href = '/post-journey'"> 
       Add Your Journey!
@@ -58,13 +62,6 @@
     </div>
     {% endfor %}
   </div>
-
-<p><a href="another">Go to the other page</a></p>
-
-<form method="POST" action="/add">
-<p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
-</form>
-
 </body>
 
 <script type="text/javascript">
@@ -72,6 +69,69 @@
   rating_select.onchange = function () {
     requested_rating = this.selectedIndex + 1
     window.location.replace(`/rating?num=${requested_rating}`)
+  }
+
+  let rat_button = document.getElementById("rat-mode")
+  rat_button.onclick = () => {
+    console.log("rat time")
+
+    // Change the color of the elements
+    let journey_boxes = document.getElementsByClassName("journey-box")
+    for (let i = 0; i < journey_boxes.length; i++) {
+      journey_boxes[i].style.backgroundColor = "black"
+    }
+
+    let date_boxes = document.getElementsByClassName("date-box")
+    for (let i = 0; i < date_boxes.length; i++) {
+      date_boxes[i].style.backgroundColor = "darkred"
+    }
+
+    let detail_boxes = document.getElementsByClassName("detail")
+    for (let i = 0; i < detail_boxes.length; i++) {
+      detail_boxes[i].style.backgroundColor = "gold"
+    }
+
+    let filter_boxes = document.getElementsByClassName("filter-form")
+    for (let i = 0; i < filter_boxes.length; i++) {
+      filter_boxes[i].style.backgroundColor = "#303030"
+    }
+
+    let filter_button = document.getElementsByClassName("filter-button")
+    for (let i = 0; i < filter_button.length; i++) {
+      filter_button[i].style.backgroundColor = "#303030"
+    }
+
+    let html_elt = document.documentElement
+    html_elt.style.backgroundColor = "red"
+
+    // Change the buttons.
+    for (let i = 0; i < journey_boxes.length; i++) {
+      let details = journey_boxes[i].getElementsByClassName("detail")
+
+      // Choose a rat from the start station (rat1) and display it's name and favorite food
+      let url = "/rat?station=" + details[0].innerHTML
+      fetch(url).then(
+        response => response.json()
+      )
+      .then(
+        data => {
+        details[0].innerHTML=data["rat"]["name"]
+        details[1].innerHTML=data["rat"]["food"]
+      })
+
+      // Choose a rat from the end station (rat2) and display it's name and favorite food
+      let url2 = "/rat?station=" + details[2].innerHTML
+      fetch(url2).then(
+        response => response.json()
+      )
+      .then(
+        data => {
+        details[2].innerHTML=data["rat"]["name"]
+        details[2].style.backgroundColor = 'green'
+        details[3].innerHTML=data["rat"]["food"]
+        details[3].style.backgroundColor = 'green'
+      })
+    }
   }
 </script>
 </html>
