@@ -195,9 +195,9 @@ def route():
 def rat():
 	station = request.args["station"].strip()
 
-	query = "SELECT R.name, L.name, R.favorite_food \
-	FROM rat R, lives_at L \
-	WHERE R.rsn = L.rsn AND L.name ~ '\y{}\y';".format(station)
+	query = "SELECT R.name, R.sname, R.favorite_food \
+	FROM Rat_Lives_At R \
+	WHERE R.sname ~ '\y{}\y';".format(station)
 
 	cursor = g.conn.execute(query)
 	results = []
