@@ -75,9 +75,10 @@
   rat_button.onclick = () => {
     console.log("rat time")
 
-    let rating_boxes = document.getElementsByClassName("journey-box")
-    for (let i = 0; i < rating_boxes.length; i++) {
-      rating_boxes[i].style.backgroundColor = "black"
+    // Change the color of the elements
+    let journey_boxes = document.getElementsByClassName("journey-box")
+    for (let i = 0; i < journey_boxes.length; i++) {
+      journey_boxes[i].style.backgroundColor = "black"
     }
 
     let date_boxes = document.getElementsByClassName("date-box")
@@ -103,6 +104,34 @@
     let html_elt = document.documentElement
     html_elt.style.backgroundColor = "red"
 
+    // Change the buttons.
+    for (let i = 0; i < journey_boxes.length; i++) {
+      let details = journey_boxes[i].getElementsByClassName("detail")
+
+      // Choose a rat from the start station (rat1) and display it's name and favorite food
+      let url = "/rat?station=" + details[0].innerHTML
+      fetch(url).then(
+        response => response.json()
+      )
+      .then(
+        data => {
+        details[0].innerHTML=data["rat"]["name"]
+        details[1].innerHTML=data["rat"]["food"]
+      })
+
+      // Choose a rat from the end station (rat2) and display it's name and favorite food
+      let url2 = "/rat?station=" + details[2].innerHTML
+      fetch(url2).then(
+        response => response.json()
+      )
+      .then(
+        data => {
+        details[2].innerHTML=data["rat"]["name"]
+        details[2].style.backgroundColor = 'green'
+        details[3].innerHTML=data["rat"]["food"]
+        details[3].style.backgroundColor = 'green'
+      })
+    }
   }
 </script>
 </html>

@@ -12,6 +12,8 @@ from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response, session
 import regex as re
+import json
+import random
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
@@ -186,6 +188,35 @@ def sort():
 def route():
   session["rating"] = request.args['num']
   return redirect('/')
+
+# Recieves a station name.
+# Retrieves the rats at that station along with their favorite food.
+@app.route('/rat', methods=["GET"])
+def rat():
+	station = request.args["station"].strip()
+
+	query = "SELECT R.name, L.name, R.favorite_food \
+	FROM rat R, lives_at L \
+	WHERE R.rsn = L.rsn AND L.name ~ '\y{}\y';".format(station)
+
+	cursor = g.conn.execute(query)
+	results = []
+
+	for result in cursor:
+		results.append({
+			"name": result[0],
+			"sname": result[1],
+			"food": result[2]
+		})
+
+	if (len(results) > 0):
+		return json.dumps({"rat": random.choice(results)})
+	else:
+		return json.dumps({"rat": {
+			"name": "No Ratz",
+			"sname": "No Ratz",
+			"food": "No Ratz"
+		}})
 
 # POST endpoint for inserting new Journey tuple
 @app.route('/insert-new-journey', methods=['POST'])
