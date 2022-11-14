@@ -2,7 +2,7 @@
 <head>
   <link rel="stylesheet" href="../static/style.css">
   <script>
-
+    // Get the start stations for the given line.
     function get_start_stations() {
       clear_form(0)
       identifier = document.getElementById('identifier').value
@@ -15,6 +15,7 @@
         });
     }
 
+    // Get the possible end stations for a given line and start station.
     function get_end_stations() {
       clear_form(1)
       identifier = document.getElementById('identifier').value
@@ -28,6 +29,7 @@
         });
     }
 
+    // Get the trains that run on a line and inbetween the given start and end station.
     function get_trains() {
       clear_form(2)
       identifier = document.getElementById('identifier').value
@@ -42,6 +44,7 @@
         });
     }
 
+    // Once the journey information has been inputted, load the commuter-related inputs.
     function load_remaining_inputs() {
 
       remaining_inputs = ["ssn", "age" , "date", "name", "is_cs_student", "rating"]
@@ -55,6 +58,7 @@
 
     }
 
+    // Create an option element with the given data.
     function add_select(select_id, options) {
 
       select = document.getElementById(select_id)
@@ -70,6 +74,7 @@
 
     }
 
+    // Clear the form of the inputs.
     function clear_form(index) {
 
       input_ids = ["start_station", "end_station", "train_id", "rating", "ssn", "date", "name", "age", "is_cs_student"]
