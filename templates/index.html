@@ -5,7 +5,7 @@
 
 
 <body>
-  <h1>Journey Journal</h1>
+  <h1 id="page-header">Journey Journal</h1>
 
   <div id="rat-mode">
     <img src="../static/rat.png" alt="rat mode" style="height: 50px;">
@@ -65,15 +65,21 @@
 </body>
 
 <script type="text/javascript">
+  // Sort by rating when the rating filter is changed.
   let rating_select = document.getElementById("filter-rating")
   rating_select.onchange = function () {
     requested_rating = this.selectedIndex + 1
     window.location.replace(`/rating?num=${requested_rating}`)
   }
 
+  // Enter ~RAT MODE~ when the rat is clicked.
   let rat_button = document.getElementById("rat-mode")
   rat_button.onclick = () => {
     console.log("rat time")
+
+    // Change the page to say "Rat Mode"
+    let header = document.getElementById("page-header")
+    header.innerHTML = "RAT MODE"
 
     // Change the color of the elements
     let journey_boxes = document.getElementsByClassName("journey-box")
