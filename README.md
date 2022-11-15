@@ -9,7 +9,7 @@ When Uma and Abram first arrived in New York City, they were astounded by the co
 The database resides on `ank2177`.
 
 ## URL of Web Application
-The web application is hosted on _.
+The web application is hosted on http://34.133.87.133:8111/.
 
 ## Implementation
 We implemented everything from the original proposal, as well as some new features. Below they are briefly described.
