@@ -46,7 +46,14 @@ The page instantly changes to "rat colors," and it displays information that is 
 
 ## Two Web Pages
 ### Index.html
-Viewing journeys required a query
+The main functionality of the database operations on this page is to display information about the journeys. The following queries are used.
+* The default state of the home page is to show all the journeys. This is achieved by querying both the Journey and Commuter tables, and matching the Journey to the Commuter using ssn. Only the name, start station, end station, identifier, rating, and date are needed.
+* In the case the commuter would like to see how journeys have changed over time, they may choose to sort the journeys by date. The query is then augmented with an ORDER BY statement.
+* In the case the commuter would like to see journeys above a certain rating, they can filter by rating. This is especially helpful if you would like to find the best way to get somewhere, or just need some inspiration! The query adds an additional filter for rating.
+
+The webpage also includes a “Rat Mode” Easter Egg to cater to **all** passengers of the subway. Rat mode involves the following additional query.
+* The Lives_at relation is queried to find all the rats living at a given station. The rat name, station name, and favorite food are returned. The station names and ratings on the page are then converted to display the rats living at the stations and their favorite food, information that is more relevant to our rat users.
+
 
 ### Journey.html
 
