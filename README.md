@@ -24,7 +24,22 @@ As scoped in the proposal, we created a page where commuters can submit data abo
 
 The user first inputs information about the journey itself. This includes the subway line, the start station, the end station, and the train ID. Next, they input information about themself, which includes their rating, ssn, date of trip, name, age, and whether they are a CS student.
 
-After all inputs are filled in, they can then post the journey.
+When the user selects a value for a given input, the application then queries the database to return a new set of selections for the user to choose from. Our application guarantees that these selections are always compatible with all previous inputs. For example, after a user selects a line and start station, the application will return all the possible end stations compatible with that specific line and start station. Here is how such a query looks,
+
+```
+SELECT DISTINCT SA.train_id 
+FROM Services S, Stops_At SA, Stops_At SA2 
+WHERE 
+  S.train_id = SA.train_id AND 
+  S.train_id = SA2.train_id AND 
+  S.identifier = identifier AND 
+  SA.name != start_station AND 
+  SA2.name != end_station
+```
+
+This is an important since we have check constraints within the Journey schema and we want the user to be able to easily make selections that will not violate any of these constraints.
+
+After all inputs are filled in, the user can post the journey.
 
 ![postjourney](../static/post_journey.png)
 
