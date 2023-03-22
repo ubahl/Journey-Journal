@@ -5,14 +5,16 @@
 
 When Uma and Abram first arrived in New York City, they were astounded by the complicated, yet beautiful, subway system. So when the opportunity arose to model such a system to track their fun subway adventures, they jumped to the task. We present *Journey Journal,* a web application where commuters can add and view subway journeys.
 
+## Implementation Summary
+All entities were modeled as in the E/R diagram below. The entities and relationships, along with some sample data, were implemented with PostgreSQL.
+
+<img src="https://github.com/ubahl/Journey-Journal/blob/main/static/er_diagram.png" width=50% height=50%>
+
 ## PostgreSQL Account
 The database resides on `ank2177`.
 
 ## URL of Web Application
 The web application is hosted on http://34.133.87.133:8111/.
-
-## Implementation
-We implemented everything from the original proposal, as well as some new features. Below they are briefly described.
 
 ### Viewing Journeys
 As scoped in the proposal, the home page displays all the journeys submitted by commuters. Each journey contains the commuter's name, the date of the journey, the start and end station, the subway line, and the rating.
