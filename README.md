@@ -1,7 +1,7 @@
 # Journey Journal
 > "Its about journaling the journey; not destining your destination"
 
-**A COMS W4111 Project by Uma Bahl & Abram Kremer**
+**A Project by Uma Bahl & Abram Kremer**
 
 When Uma and Abram first arrived in New York City, they were astounded by the complicated, yet beautiful, subway system. So when the opportunity arose to model such a system to track their fun subway adventures, they jumped to the task. We present *Journey Journal,* a web application where commuters can add and view subway journeys.
 
@@ -17,7 +17,7 @@ We implemented everything from the original proposal, as well as some new featur
 ### Viewing Journeys
 As scoped in the proposal, the home page displays all the journeys submitted by commuters. Each journey contains the commuter's name, the date of the journey, the start and end station, the subway line, and the rating.
 
-![homepage](../static/home_page.png)
+<img src="https://github.com/ubahl/Journey-Journal/blob/main/static/home_page.png" width=50% height=50%>
 
 ### Posting Journeys
 As scoped in the proposal, we created a page where commuters can submit data about their journey, which can then be viewed on the home page upon submission. The page is accessible from the home page "Add Your Journey!" button.
@@ -26,7 +26,7 @@ The user first inputs information about the journey itself. This includes the su
 
 After all inputs are filled in, the user can post the journey.
 
-![postjourney](../static/post_journey.png)
+<img src="https://github.com/ubahl/Journey-Journal/blob/main/static/post_journey.png" width=50% height=50%>
 
 ### (New Feature) Filtering Journeys
 To demonstrate the fun queries that can be performed in our system, we implemented two filtering buttons on the home screen.
@@ -35,14 +35,14 @@ The first is to sort the journeys by date. This allows users to then see how jou
 
 The second is to filter journeys by rating. This way, users can find out which trips to avoid, or maybe even discover a very fun trip!
 
-![filterjourney](../static/filter_journey.png)
+<img src="https://github.com/ubahl/Journey-Journal/blob/main/static/filter_journey.png" width=50% height=50%>
 
 ### (New Feature) Rat Mode
 Our most exciting feature is an Easter Egg created with our non-human commuters in mind. In the top right corner of the home page, the user may click the rat to enter "Rat Mode."
 
 The page instantly changes to "rat colors," and it displays information that is more relevant to our rat users. The journeys now show a rat that lives at the start station (along with their favorite food), and a rat that lives at the end station (with their favorite food). Now, even our rat customers can be well equipped for their journeys. 
 
-![ratmode](../static/rat_mode.png)
+<img src="https://github.com/ubahl/Journey-Journal/blob/main/static/rat_mode.png" width=50% height=50%>
 
 ## Two Web Pages
 ### Index.html
